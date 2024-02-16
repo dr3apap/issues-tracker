@@ -1,0 +1,17 @@
+
+
+.pageWrapper{
+    grid-column:2;
+    display:flex;
+    flex-flow:column;
+    align-items:center;
+    justify-content: center;
+    gap:2rem;
+    /* background-color:var(--sec-color); */
+    text-align: center;
+    background:url('../../../../src/asset/bugWallpaper.jpeg') 0% 0%/cover no-repeat fixed;
+    height:100vh;
+
+     
+   
+}

@@ -1,26 +1,76 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useSelector } from 'react-redux'
+import issues from "./Models/bugsFactory";
+import { Routes, Route, } from 'react-router-dom';
+import UserForm from './Views/Components/Login/Login';
+import PageNav from './Views/Components/pageNav/nav';
+import Hero from './Views/Components/HeroHeader/header';
+import SideBar from './Views/Components/SideBar/SideBar';
+import { RootState } from './Controllers/Redux/rootReducer'
+import BugList from './Views/Components/bugsCard/BugList';
+import BugForm from './Views/Components/BugForm/BugForm';
+import DashBoardList from './Views/Components/Pages/DashBoardList';
+import BugsPriorityList from './Views/Components/Pages/BugsPriorityList';
+import BugDetail from './Views/Components/BugView/BugDetail';
+import RequierAuth from './Views/Components/Pages/Components/RequierAuth';
+import RequireAuth from './Views/Components/Pages/Components/RequierAuth';
+import Footer from './Views/Components/Footer/footer'
+import useForm from "./Controllers/Hooks/useForm";
+import BugTrackerUserList from './Views/Components/Login/BugTrackerUserList';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const { auth } = useSelector((state: RootState) => state);
+
+    const [formState, setForm] = useForm();
+
+    return (
+        <>
+            {/* <SideBar LoggedIn={auth.LoggedIn} /> */}
+            <PageNav />
+            <Routes>
+                <Route path="/" element={<Hero />} />
+                <Route path="user/login" element={<UserForm formState={formState} setForm={setForm} />} />
+                <Route path="user/newuser" element={<UserForm formState={formState} setForm={setForm} />} />
+
+                <Route path="user/dashboard" element={<SideBar loggedIn={auth.LoggedIn} />}>
+
+                    <Route path="user/dashboard/:priorityId" element={<BugsPriorityList />} />
+                </Route>
+                <Route path="user/:issuelists" element={<DashBoardList />} />
+                <Route path="dashboard" element={<BugsPriorityList />} />
+                <Route path="users" element={
+                    <RequireAuth>
+                        <BugTrackerUserList setForm={setForm} />
+                    </RequireAuth>} />
+                <Route path="updateuser/:userId" element={
+                    <UserForm formState={formState} setForm={setForm} />} />
+                <Route
+                    path="viewbugs"
+                    element={
+                        <RequierAuth>
+                            <BugList />
+                        </RequierAuth>
+                    }
+                />
+                <Route path="viewbug/:id" element={<BugDetail />} />
+                <Route
+                    path="updatebug/:id"
+                    element={<BugForm isReporting={false} />}
+                />
+
+
+                <Route
+                    path="reportbug"
+                    element={
+                        <RequireAuth>
+                            <BugForm isReporting />
+                        </RequireAuth>
+                    }
+                />
+            </Routes>
+            <Footer />
+        </>
+    );
 }
 
 export default App;

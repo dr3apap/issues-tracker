@@ -1,0 +1,55 @@
+SERVER ARCH:
+---------------------------------
+Data Structure:Data Base is storing USERS,Issues,Applications info and relating a User to an Issue or Issues and issue  or issues to application. Issues is a bug related to an Application or a system or service.
+User Structure: 
+Properties:first-name, last-name, email, user name, password.
+User Input:All properties
+Internal(Transform password to hash)
+Issues:prepend application:name, version, issue-desdcription,reporter(USER),issue type(list of issues) 
+Issue Input:Al properties
+Internal(Add timestamp, priority, status)
+Application:name, version, repo(url), branch, list of commits, tags
+
+DATA BASE, API(URL) and Interface
+---------------------------------
+DATA BASE:
+(Postgress/Sanity):Two table:User and Issue:
+Relationship:
+(1)User can have many Issue(s) and many Application(s)
+(2)One Issue per User  and Application
+*If Issue can be filter by version, name, and type then same response or solution
+can be link to all similar issue based on the two Relationship(type and version,and name) like list or reporters linking list of users to an issue and which is linked to a specific application.
+(This can be done during querying for Front end viewing or for CLI)
+*If there is variants of application like paid and unpaid also  if there
+different application then there will be need to assign each issue base on the application name and version like a Github repo which can have many version but same application, this will allow quick and narrowing the bug down. 
+
+(3)Application can have many users and many issues.
+---------------------------------
+Data type:
+User:first-name:string,(bytes|text) last-name:string,(bytes|text), email:string,(bytes|text),password:string,(bytes|text),user-name:string,(bytes|text)
+Issue:application-name:string,(bytes|text), type:string,(bytes|text), description:string,(bytes|text), reporter:reference, (foreign-table), timestamp:date,(timestamp), priority:string,(text|bytes), version:string,(bytes|text),status:string,(bytes|text)
+Application:name:string,(bytes|text), version:string(bytes|text),repo-url:string,(bytes|text),branch-names-and-commits:string(bytes|text)
+---------------------------------
+SERVER ARCHITECTURE:
+dependencies:Http/Https module, fs, path, crypto, url, bycrypt,kinexjs,nodemon,tsx
+Interface:API,Middleware, 
+API:
+(1)GET(2)POST(3)UPDATE(4)DELETE(5)PUT
+MIDDLEWARE:
+(1)LOGS(2)ERROR(3)PARSE(4)PROXY(AUTH)(5)SESSION(6)COOKIES(7)ENCRYPTION(8)HEADER/MIME-TYPE WRITER(9)ROUTING
+
+---------------------------------
+Implementation:
+(1)URL need to be parsed from Request Obj. URL hold the resources locator also know as path. The path need to parse to the relative part to the root or base URL which is the leading "/" and also the Request params which is like option to the request.
+(2)ParsedURL will be used to choose a routine through the routing object 
+    (i) if the route exist and has a responder get the responder else get the not Found reponder or any error middleware that is mapped to the error.
+    (ii) Note:Since http request has error symbols by number there have to be a way to map each error to a middleware that respond to a specific error.
+    (iii) This can be done by generalizing the error middleware and discriminatig through the erro code for the right response.
+    (iv) Same for the Success response crafting the right message with the response.
+    (v)The req obj will be extend by the parsed URL, headers and any other neccessary sanitization needed before calling the next routine in line
+    (vi) The  Loadbalancer will face the server meaning this is what the client report to and in return call the routine next in the middleware to check the  METHOD. This next call will then call the right Responder in the list of reponder bind to that API/URL in relation to the METHOD.
+    (vii)The responder has the req and res obj passed to it with all the neccessary info needed to make the final response. This is the last link in the stack or queue, so any prior sanitizaion, verification should have be done this routine only return succesful response it's weak so it's protected by all the proxy it's the assets.
+(3)The type of content the client want back is stated in the request response type this need to be map to the rith Mime-type or header-writer middleware or routine.
+(4)Each protected route will have a authentication routine before calling the next routine the authorization will be verify if passed next will be call if not next will be call with error parameter which mapped error routine to error type.
+(5) The last call in the stack is the responder whom call the database for related data and then send it.
+
