@@ -11,7 +11,7 @@ type SideBarProps = {
 }
 const SideBar = ({ loggedIn }: SideBarProps) => {
 
-    const open: issues[] = useSelector((state: RootState) => state.issues.filter((bug) => bug.priority == "Open"));
+    const open: issues[] = useSelector((state: RootState) => state.issues.filter((bug) => bug.issueState == "Open"));
 
 
 

@@ -20,10 +20,10 @@ export default function Form(props: FormProps) {
         issueType: "",
         version: "",
         reporter: "",
-        priority: "Open",
+        priority: "High",
         timeStamp: new Date().toString().slice(0, 24),
         _id: nanoid(),
-        bugStatus: "Open",
+        issueState: "Open",
     });
     const { issues } = useSelector((state: RootState) => state);
     const { id } = useParams();
@@ -59,10 +59,10 @@ export default function Form(props: FormProps) {
             issueType: "",
             version: "",
             reporter: "",
-            priority: "Open",
+            priority: "High",
             timeStamp: new Date().toString().slice(0, 24),
             _id: nanoid(),
-            bugStatus: "Open",
+            issueState: "Open",
         });
 
         dispatch(reportBug(bug));
@@ -76,10 +76,10 @@ export default function Form(props: FormProps) {
             issueType: "",
             version: "",
             reporter: "",
-            priority: "Open",
+            priority: "High",
             timeStamp: new Date().toString().slice(0, 24),
             _id: nanoid(),
-            bugStatus: "Open",
+            issueState: "Open",
         });
 
         //dispatch(updateBug(bugs, bug));

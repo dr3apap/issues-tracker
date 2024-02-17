@@ -15,7 +15,7 @@ const BugList = () => {
     return (
         <div className="pageWrapper">
             {issues.length > 0 ? issues.map((issue: MakeBugs, key) => {
-                const { level, color } = assignPriority(issue.priority)
+                const { level, color } = assignPriority(issue.issueState)
                 return <Link to={`/viewbug/${issue._id}`}>
                     <div className="card" style={{ color }}>
                         <Bug issue={issue} level={level} />

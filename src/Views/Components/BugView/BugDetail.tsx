@@ -23,11 +23,11 @@ const BugDetail = () => {
         version,
         timeStamp,
         description,
-        bugStatus,
+        issueState,
         reporter,
         _id
     } = bug;
-    const { color, level } = assignPrioriy(priority);
+    const { color, level } = assignPrioriy(issueState);
 
 
     // console.log("bugs in BugDetail", bug);
@@ -52,7 +52,7 @@ const BugDetail = () => {
                 <h4>{bug.issueType}</h4>
                 <p className="info">{description}</p>
                 <h4>{level}</h4>
-                <h4>{bugStatus}</h4>
+                <h4>{issueState}</h4>
                 <h4>{reporter}</h4>
                 <button type="submit" onClick={() => navigate(`/updatebug/${_id}`)}>
                     Edit Bug

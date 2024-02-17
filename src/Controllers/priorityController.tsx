@@ -1,14 +1,13 @@
-export type PriorityInput = "Open" | "In Progress" | "Closed" | string;
 export interface PriorityOutput {
     color: string;
     level: string;
 }
 
-export default function assignPrioriy(priority: PriorityInput): PriorityOutput {
+export default function assignPrioriy(priority: string): PriorityOutput {
     const colors: string[] = ["#FF6700", "#B33AA3", "#32CD32",];
     const levels: string[] = ["High", "Medium", "Low"];
 
-    function mapArg(arg: PriorityInput) {
+    function mapArg(arg: string) {
         if (arg == "Open") {
             return {
                 color: colors[0],

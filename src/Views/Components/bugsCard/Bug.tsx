@@ -1,10 +1,8 @@
+import MakeBugs from '../../../Models/bugsFactory'
 
 type BugProps = {
-    issue: {
-        name: string,
-        version: String,
-    },
-    level: "Open" | "In Progress" | "Closed" | string | undefined
+    issue: MakeBugs
+    level: string,
 }
 
 const Bug = ({ issue, level }: BugProps) => {

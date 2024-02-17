@@ -13,9 +13,9 @@ const bug1: MakeBugs = {
     description: "App suddenly froze and need to be restart",
     reporter: "Dre Michael",
     timeStamp: new Date().toString().slice(0, 24),
-    priority: "Open",
+    priority: "High",
     version: "V2.0",
-    bugStatus: "Open"
+    issueState: "Open"
 
 
 }
@@ -27,9 +27,9 @@ const bug2: MakeBugs = {
     description: "App crash on startup",
     reporter: "Desmond Dessy",
     timeStamp: new Date().toString().slice(0, 24),
-    priority: "In Progress",
+    priority: "High",
     version: "V1.0",
-    bugStatus: "Open"
+    issueState: "Open"
 }
 
 
@@ -40,9 +40,9 @@ const bug3: MakeBugs = {
     description: "App stuck on loading",
     reporter: "Desiree Brat",
     timeStamp: new Date().toString().slice(0, 24),
-    priority: "Closed",
+    priority: "Medium",
     version: "V3.0",
-    bugStatus: "Open"
+    issueState: "In Progress"
 }
 
 
@@ -53,9 +53,9 @@ const bug4: MakeBugs = {
     description: "App suddenly crash",
     reporter: "Sage Looney",
     timeStamp: new Date().toString().slice(0, 24),
-    priority: "Open",
+    priority: "Low",
     version: "V3.0",
-    bugStatus: "Open"
+    issueState: "Closed"
 }
 
 
