@@ -24,7 +24,7 @@ const IssuesInfo = ({ count, state }: DashInfoProps) => {
     return <ul className="py-8">
         <li className="flex flex-col gap-y-2 px-4 py-2 text-[var(--text-color)] text-fluid--1 text-center rounded-md bg-[var(--surface)]">
             <span className="text-fluid--1">{state} Issues: {`${count}`}</span>        {/*<li className="">`New Notifications:${newNotifications}` </li>*/}
-            <span className={`text-fluid-1 px-2 py-2 text-flud--2 bg-[${color}]`}>{`${level}`}</span>        {/*<li className="">`New Notifications:${newNotifications}` </li>*/}
+            <span className={`text-fluid-1 px-2 py-2 text-flud--2 ${level == "High" ? "bg-[#FF6700]" : level == "Medium" ? "bg-[#B33AA3]" : "bg-[#32CD32]"}`}>{`${level}`}</span>        {/*<li className="">`New Notifications:${newNotifications}` </li>*/}
             <Link to={`/user/${state.toLowerCase().trim()}issues`} className="underline decoration-4 decoration-green-400">Preview</Link>
         </li>
     </ul >
