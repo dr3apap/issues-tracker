@@ -1,68 +1,46 @@
 import React from 'react'
-import { useParams, useNavigate } from 'react-router-dom';
+import MakeBugs from '../../../Models/bugsFactory';
+import Application from '../../../Models/appFactory';
+import { useAppDispatch, useAppSelector } from '../../../Controllers/Hooks/app-hooks';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import './bugview.css';
 import useClick from '../../../Controllers/Hooks/useClick'
 import assignPrioriy from '../../../Controllers/priorityController';
 
+export interface CombinedView {
+    application: Application;
+    issue: MakeBugs;
+}
 
-const BugDetail = () => {
-
-
+const IssueCard = () => {
+    const { priorityId } = useParams();
     const [, setIsclicked, bugs] = useClick();
-
-    const { id } = useParams();
-
-
-
-
-    const navigate = useNavigate();
-    const bug = bugs.filter((bug) => bug._id === id)[0];
-    const {
-        priority,
-        name,
-        version,
-        timeStamp,
-        description,
-        issueState,
-        reporter,
-        _id
-    } = bug;
-    const { color, level } = assignPrioriy(issueState);
-
+    const issue = useAppSelector((issues) => issues.issues.find((issue: MakeBugs) => issue._id === priorityId) as MakeBugs);
+    const app = useAppSelector((apps) => apps.apps.find((app: Application) => app.appName == issue.appName) as Application);
+    //const issue = issues.find((issue) => issue._id === priorityId) as MakeBugs;
+    const { appName, version, repolink } = app;
+    const { issueTitle, issueState, timeReported, reporter, priority, issueType, description } = issue;
+    const level = assignPrioriy(issueState as string);
 
     // console.log("bugs in BugDetail", bug);
 
-
-
-
     return (
-        <div className="pageWrapper">
-            <div className="bugDetail" style={{ color }}>
-                <button
-                    onClick={() => {
-                        setIsclicked(name);
-                    }}
-                    className="closeBtn"
-                >
-                    Close
-                </button>
-                <h1>{name}</h1>
-                <h4>{version}</h4>
-                <h4>{timeStamp}</h4>
-                <h4>{bug.issueType}</h4>
-                <p className="info">{description}</p>
-                <h4>{level}</h4>
-                <h4>{issueState}</h4>
-                <h4>{reporter}</h4>
-                <button type="submit" onClick={() => navigate(`/updatebug/${_id}`)}>
-                    Edit Bug
-                </button>
-            </div>
+        <div className="flex flex-col gap-4 bg-[var(--color-rich-secondary-100)] shadow-md">
+            <h2 className="text-fluid--2">Title:{issueTitle}</h2>
+            <li className="text-fluid--2">Application Name:{appName}</li>
+            <li className="text-fluid--2">Verion:{version}</li>
+            <li className={`rounded-full px-4 py-4 outline-none ${priority == "High" ? "bg-priority-1" : priority == "Medium" ? "bg-priority-2" : "bg-priority-3"}`}>Status:{issueState}</li>
+            <li className="text-fluid--2">Date Reported:{timeReported}</li>
+            <li className="text-fluid--2">Reporter Name:{reporter}</li>
+            <li className="text-fluid--2">Priority:{priority}</li>
+            <li className="text-fluid--2">Issue Type:{issueType}</li>
+            <li className="text-fluid--2"><div>Description:{description}</div></li>
+            <Link to={`/issueupdate/${priorityId}`} className="px-4 py-4 rounded-full text-fluid--2 bg-priority-3 tex-[var(--color-brand-100)] border-2 border-[var(--color-brand-300)]">Edit Report</Link>
         </div>
     );
 
 }
 
-export default BugDetail;
+export default IssueCard;
 
 
