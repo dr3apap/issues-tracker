@@ -4,16 +4,15 @@ import IssueSummary from '../Pages/IssueSummary';
 import { useParams } from 'react-router-dom'
 import { RootState } from '../../../Controllers/Redux/rootReducer'
 export interface DashBoardListProps {
-    priority: "Open" | "In Progress" | "Closed";
+    priority: "High" | "Medium" | "Low";
     count: number;
-    issueId: string;
+    issueTitle: string;
     timeStamp: string;
     //newNotifications: number;
 }
 
 export default function DashBoardList() {
     const { issuelists } = useParams()
-    console.log(`Inside in DashBoardList:{${issuelists}}`)
 
     const open: issues[] = useSelector((state: RootState) => state.issues.filter((bug) => bug.issueState == "Open"));
 
