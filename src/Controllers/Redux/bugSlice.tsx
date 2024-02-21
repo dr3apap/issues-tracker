@@ -1,11 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import MakeBugs from "../../Models/bugsFactory";
 
+export function ensureT(item: MakeBugs | undefined): MakeBugs[] | void {
+    if (item === undefined || item === null) {
+        return;
+    }
+    return [item];
+}
 
+interface BugAction {
+    state: "Open" | "Closed" | "In Progress";
+}
 
-type BugAction = {
-    name: string,
-    bugStatus: string
+interface BugUpdate {
+    id: string;
+    description: string,
+    issueType: string,
 
 }
 
@@ -31,34 +41,31 @@ const bugSlice = createSlice({
         },
 
         getBugs: (state: MakeBugs[] /*action:PayloadAction<MakeBugs>*/) => {
-
             return state;
-
         },
 
-        updateBug: (state: MakeBugs[], action: PayloadAction<MakeBugs, string>) => {
-
-            state.forEach((b, i) => {
-                if (b._id === action.payload._id) {
-                    state[i] = action.payload;
+        updateBug: (state: MakeBugs[], action: PayloadAction<BugUpdate>) => {
+            [...state].forEach((b, i) => {
+                if (b._id === action.payload.id) {
+                    state[i].description = action.payload.description;
                 }
             });
+            return state;
         },
 
-
-        trackBug: (state: MakeBugs[], action: PayloadAction<MakeBugs>) => {
-
-        },
-
-        markClose: (state: MakeBugs[], action: PayloadAction<BugAction>) => {
-            state.filter(bug => bug.name === action.payload.name)[0].bugStatus =
-                action.payload.bugStatus;
-        }
-
+        getClosedIssues: (state: MakeBugs[], action: PayloadAction<BugAction>) =>
+            ensureT([...state].find(bug => bug.issueState === action.payload.state)),
+        getOpenIssues: (state: MakeBugs[], action: PayloadAction<BugAction>) =>
+            ensureT([...state].find(bug => bug.issueState === action.payload.state)),
+        getInprogressIssues: (state: MakeBugs[], action: PayloadAction<BugAction>) =>
+            ensureT([...state].find(bug => bug.issueState === action.payload.state)),
     }
 
-})
+});
 
 
-export default bugSlice.reducer;
-export const { reportBug, trackBug, markClose, getBugs, updateBug } = bugSlice.actions;
+export default bugSlice.reducer
+export const { reportBug, getClosedIssues, getBugs, updateBug, getOpenIssues, getInprogressIssues } = bugSlice.actions;
+export const IssuesDispatch = { ...bugSlice.actions }
+console.log(`Inside bugslice:${Object.keys(IssuesDispatch)}`)
+//export type IssuesDispatch = keyof bugSlice.actions;
