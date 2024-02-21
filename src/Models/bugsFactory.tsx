@@ -3,31 +3,23 @@ import { nanoid } from "@reduxjs/toolkit";
 
 class MakeBugs {
     _id!: string;
-    [issueName: string]: string;
     description!: string;
     priority!: "High" | "Medium" | "Low";
     issueType!: string;
     reporter!: string;
-    timeStamp!: string;
-    version!: string;
+    timeReported: string;
     issueState!: "Open" | "In Progress" | "Closed";
-    ;
-    constructor(issue: MakeBugs) {
-        this._id = nanoid(5);
-        if (issue !== undefined) {
-            this.issueType = issue.issueType;
-            this.name = issue.name;
-            this.description = issue.description;
-            this.priority = issue.priority;
-            this.reporter = issue.reporter;
-            this.timeStamp = issue.timeStamp;
-            this.version = issue.version;
-            this.issueState = issue.issueState;
-
-
-        }
-
-
+    issueTitle!: string;
+    appName!: string;
+    constructor({ appName, issueTitle, issueType, description, priority, reporter, timeReported, issueState }: MakeBugs, id = nanoid(5)) {
+        this._id = id;
+        this.description = description;
+        this.priority = priority;
+        this.reporter = reporter;
+        this.timeReported = timeReported;
+        this.issueState = issueState;
+        this.issueTitle = issueTitle;
+        this.appName = appName;
     }
 }
 
