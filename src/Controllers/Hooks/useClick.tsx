@@ -5,7 +5,7 @@ import { RootState } from '../Redux/rootReducer'
 import { getBugs } from '../Redux/bugSlice'
 
 type useStateProps = {
-    name: string | number,
+    id: string | number,
     clicked: boolean
 
 
@@ -23,7 +23,7 @@ export default function useClick(): [useStateProps, ClicKControllersReturn, Make
     const { issues } = useSelector((state: RootState) => state);
     const dispatch = useDispatch()
     const [isClicked, setIsClicked] = useState({
-        name: "",
+        id: "",
         clicked: false
     } as useStateProps);
 
@@ -35,10 +35,9 @@ export default function useClick(): [useStateProps, ClicKControllersReturn, Make
     }, [size, dispatch
     ])
 
-
-    const bugClicked = (name: string | number) => {
+    const bugClicked = (id: string | number) => {
         setIsClicked({
-            name: name,
+            id,
             clicked: !isClicked.clicked
         })
     }
