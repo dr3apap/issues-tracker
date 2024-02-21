@@ -1,8 +1,10 @@
 import './form.css'
 import React, { useState, useEffect, useRef, SelectHTMLAttributes } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../../Controllers/Hooks/app-hooks'
 import { reportBug } from '../../../Controllers/Redux/bugSlice';
+import { createApp } from '../../../Controllers/Redux/appSlice';
 import MakeBugs from '../../../Models/bugsFactory';
+import Application from '../../../Models/appFactory';
 import { nanoid } from '@reduxjs/toolkit';
 import { useNavigate, useParams } from 'react-router-dom';
 // import getBugs from '../../../Controllers/Redux/bugSlice';

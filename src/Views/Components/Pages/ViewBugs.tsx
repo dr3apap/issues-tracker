@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "../../../Controllers/Hooks/app-hooks";
 import { useEffect } from 'react'
 import { RootState } from '../../../Controllers/Redux/rootReducer'
 import BugsCard from '../bugsCard/BugList'
@@ -12,8 +12,8 @@ const ViewBugs = () => {
     //     name:"",
     //     isClicked:false
     //   })
-    const dispatch = useDispatch();
-    const { issues } = useSelector((state: RootState) => state)
+    const dispatch = useAppDispatch();
+    const { issues } = useAppSelector((issues) => issues)
     const size: boolean = issues.length < 1;
 
 

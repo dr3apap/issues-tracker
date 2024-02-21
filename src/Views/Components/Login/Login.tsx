@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './login.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../Controllers/Hooks/app-hooks';
 import { signIn } from '../../../Controllers/Redux/authSlice';
 import { RootState } from '../../../Controllers/Redux/rootReducer';
 import { getUser } from '../../../Controllers/Redux/userSlice';
@@ -17,8 +17,8 @@ type LoginAndRegisterProps = {
 type PasswordMatch = string;
 let passwordConfirm: PasswordMatch = ""
 export default function Login({ formState, setForm }: LoginAndRegisterProps) {
-    const dispatch = useDispatch();
-    const { users } = useSelector((state: RootState) => state);
+    const dispatch = useAppDispatch();
+    const { users } = useAppSelector((state) => state);
     const navigate = useNavigate();
     const { userId } = useParams();
     const { pathname: currentPath } = useLocation()
