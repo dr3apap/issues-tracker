@@ -8,9 +8,7 @@ const users = [
         firstName: "Dr3",
         lastName: "Papa",
         password: "password",
-
     }),
-
 
     new User({
         _userId: nanoid(),
@@ -30,8 +28,6 @@ const users = [
         password: "password",
 
     }),
-
-
     new User({
         _userId: nanoid(),
         userName: "iybk",
