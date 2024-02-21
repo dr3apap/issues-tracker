@@ -9,6 +9,7 @@ import { RootState } from './Controllers/Redux/rootReducer'
 import BugList from './Views/Components/bugsCard/BugList';
 import BugForm from './Views/Components/BugForm/BugForm';
 import DashBoardList from './Views/Components/Pages/DashBoardList';
+import IssueSummary from './Views/Components/Pages/IssueSummary';
 import BugsPriorityList from './Views/Components/Pages/BugsPriorityList';
 import BugDetail from './Views/Components/BugView/BugDetail';
 import RequierAuth from './Views/Components/Pages/Components/RequierAuth';
@@ -33,15 +34,16 @@ function App() {
                 <Route path="user/newuser" element={<UserForm formState={formState} setForm={setForm} />} />
 
                 <Route path="user/dashboard" element={<SideBar loggedIn={auth.LoggedIn} />}>
-
-                    <Route path="user/dashboard/:priorityId" element={<BugsPriorityList />} />
                 </Route>
-                <Route path="user/:issuelists" element={<DashBoardList />} />
-                <Route path="dashboard" element={<BugsPriorityList />} />
+                <Route path="user/dashboard/:issuesKind" element={<IssueSummary />} />
+                <Route path="user/dashboard/issues/:priorityId" element={<BugDetail
+                />} />
+
+                {/*<Route path="issueupdate/:issueId" element={<BugsPriorityList />} />
                 <Route path="users" element={
                     <RequireAuth>
                         <BugTrackerUserList setForm={setForm} />
-                    </RequireAuth>} />
+                    </RequireAuth>} />*/}
                 <Route path="updateuser/:userId" element={
                     <UserForm formState={formState} setForm={setForm} />} />
                 <Route
@@ -54,7 +56,7 @@ function App() {
                 />
                 <Route path="viewbug/:id" element={<BugDetail />} />
                 <Route
-                    path="updatebug/:id"
+                    path="issueupdate/:issueId"
                     element={<BugForm isReporting={false} />}
                 />
 
