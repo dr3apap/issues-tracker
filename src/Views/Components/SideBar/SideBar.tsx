@@ -41,8 +41,8 @@ const SideBar = ({ loggedIn }: SideBarProps) => {
                 </ul>
                 <button onClick={() => handleSignOut()}>Logout</button>
             </aside>
-            <div className="bg-green-700">
-                {loggedIn && <h1>Welcome User</h1> && (
+            <div className="bg-green-700 flex flex-col gap-y-8">
+                {loggedIn && <h3 className="text-fluid--1">Welcome User</h3> && (
                     <IssueDashInfo />)}
             </div>
             <Outlet />

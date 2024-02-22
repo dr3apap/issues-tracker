@@ -23,12 +23,13 @@ export default function DashBoardList() {
     return (<>
         <h1>Hello</h1>
         {issuelists == '/user/openissues' && (
-            open.map((issue) => <IssueSummary key={issue._id} priority={issue.issueState} count={open.length} issueId={issue._id} timeStamp={issue.timeStamp} />)) ||
+            open.map((issue) => <IssueSummary />)) ||
 
-            issuelists == '/user/closedissues' && (closed.map((issue) => <IssueSummary key={issue._id} priority={issue.issueState} count={open.length} issueId={issue._id} timeStamp={issue.timeStamp} />)) ||
+            issuelists == '/user/closedissues' && (closed.map((issue) => <IssueSummary
+            />)) ||
 
             issuelists == '/user/in%20progressissues' && (
-                inprogress.map((issue) => <IssueSummary key={issue._id} priority={issue.issueState} count={open.length} issueId={issue._id} timeStamp={issue.timeStamp} />))}
+                inprogress.map((issue) => <IssueSummary />))}
 
 
 
