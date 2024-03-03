@@ -12,13 +12,16 @@ export interface CombinedView {
     issue: MakeBugs;
 }
 
+
 const IssueCard = () => {
-    const { priorityId } = useParams();
+    //const { priorityId } = useParams();
+    const { issueId } = useParams();
+    const { userName } = useParams();
     const [, setIsclicked, bugs] = useClick();
-    const issue = useAppSelector((issues) => issues.issues.find((issue: MakeBugs) => issue._id === priorityId) as MakeBugs);
+    const issue = useAppSelector((issues) => issues.issues.find((issue: MakeBugs) => issue._id === issueId) as MakeBugs);
     const app = useAppSelector((apps) => apps.apps.find((app: Application) => app.appName == issue.appName) as Application);
-    //const issue = issues.find((issue) => issue._id === priorityId) as MakeBugs;
-    const { appName, version, repolink } = app;
+    //const issue = issues.find((issue) => issue._id === issueId) as MakeBugs;
+    const { appName, appVersion, repolink } = app;
     const { issueTitle, issueState, timeReported, reporter, priority, issueType, description } = issue;
     const level = assignPrioriy(issueState as string);
 

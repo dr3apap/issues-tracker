@@ -2,43 +2,53 @@ import './form.css'
 import React, { useState, useEffect, useRef, SelectHTMLAttributes } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../Controllers/Hooks/app-hooks'
 import { reportBug } from '../../../Controllers/Redux/bugSlice';
+import { createUser } from '../../../Controllers/Redux/userSlice';
 import { createApp } from '../../../Controllers/Redux/appSlice';
 import MakeBugs from '../../../Models/bugsFactory';
 import Application from '../../../Models/appFactory';
 import { nanoid } from '@reduxjs/toolkit';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 // import getBugs from '../../../Controllers/Redux/bugSlice';
-import updateBug from '../../../Controllers/Redux/bugSlice'
-import { RootState } from '../../../Controllers/Redux/rootReducer';
+import { updateBug } from '../../../Controllers/Redux/bugSlice'
+import IssueReporter from '../../../Models/reporterFactory';
+
 type FormProps = {
     isReporting: boolean
 }
 
 
 export default function Form(props: FormProps) {
-    const { issueId } = useParams();
     const { isReporting } = props;
+    const { issueId } = useParams();
+    const { userName } = useParams();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
     const [issue, setIssue] = useState<MakeBugs>({
         description: "",
         issueType: "",
-        reporter: "",
+        reporter: {} as IssueReporter,
         priority: "High",
         timeReported: new Date().toString().slice(0, 24),
-        _id: nanoid(),
+        _id: nanoid(5),
         issueState: "Open",
         issueTitle: "",
         appName: "",
+        appVersion: "",
+        repolink: "",
     });
     const [app, setApp] = useState<Application>({
         _id: nanoid(),
         appName: "",
-        version: "",
+        appVersion: "",
         repolink: "",
     });
 
-    const issueToUpdate = useAppSelector((issues) => issues.issues.find((issue: MakeBugs) => issue._id == issueId) as MakeBugs);
-    const appToupdate = useAppSelector((apps) => apps.apps.find((app: Application) => app.appName == issue.appName) as Application);
-    const { apps } = useAppSelector(apps => apps)
+
+
+    //const issueToUpdate = useAppSelector((issues) => issues.issues.find((issue: MakeBugs) => issue._id == issueId) as MakeBugs);
+    //const appToupdate = useAppSelector((apps) => apps.apps.find((app: //Application) => app.appName == issueToUpdate.appName) as Application);
+    //const { apps } = useAppSelector(apps => apps)
     /* 
     **
     *Use the useEffect hook to populate the useState with the user info 
@@ -171,45 +181,71 @@ export default function Form(props: FormProps) {
                         placeholder="repolink"
                         id="repolink"
                         onChange={handleChange}
+                        required
                     />
 
-                    <label htmlFor="issuetype">Type:</label>
-                    <select name="issueType" id="issuetype" onChange={handleChange} required>
-                        <option>Please select any that apply to your report</option>
-                        <option value="Crash" data-type="Crash">Crash</option>
-                        <option value="Loading" data-type="Loading">Loading</option>
-                        <option value="Error" data-type="Error">Error</option>
-                        <option value="Display" data-type="Display">Display</option>
-                        <option value="Other" data-type="Other">Other</option>
+                    <label htmlFor="issuetype">Issue type:</label>
+                    <select name="issueType" id="issuetype" onChange={handleChange} required disabled={!isReporting ? true : false}>
+                        <option>Please select one</option>
+                        <option value={!isReporting && issue.issueType == "Crash" ? issue.issueType : "Crash"} data-type="Crash">Crash</option>
+                        <option value={!isReporting && issue.issueType == "Loading" ? issue.issueType : "Loading"} data-type="Loading">Loading</option>
+                        <option value={!isReporting && issue.issueType == "Error" ? issue.issueType : "Error"} data-type="Error">Error</option>
+                        <option value={!isReporting && issue.issueType == "Display" ? issue.issueType : "Display"} data-type="Display">Display</option>
+                        <option value={!isReporting && issue.issueType == "Other" ? issue.issueType : "Other"} data-type="Other">Other</option>
                     </select>
-                    {!isReporting && <label htmlFor="issueState">IssueState:</label>}
-                    {!isReporting && <select name="issuestate" id="issuestate" onChange={handleChange} disabled
-                    >
-                        <option value="Open">Open</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Closed">Closed</option>
-                    </select>}
+                    {!isReporting && <><label htmlFor="issueState">IssueState:</label>
+                        <select name="issuestate" id="issuestate" onChange={handleChange}
+                            disabled
+                        >
+                            <option value="Open">Open</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Closed">Closed</option>
+                        </select></>}
                     <label htmlFor="version">Application Version:</label>
                     <input
-                        name="version"
-                        value={app.version}
+                        name="appVersion"
+                        value={app.appVersion}
                         type="text"
                         id="version"
                         placeholder="Application-Version"
                         onChange={handleChange}
                         required
                     />
-                    <label htmlFor="reporter">Bug Reporter</label>
+                    <label htmlFor="reporter-firstname">
+                        First Name</label>
                     <input
-                        name="reporter"
-                        value={issue.reporter}
+                        name="firstName"
+                        value={issue.reporter.firstName}
                         type="text"
-                        id="reporter"
-                        placeholder="Full Name Pls or Login:"
+                        id="reporter-firstname"
+                        placeholder="First-Name"
+                        onChange={handleChange}
+                        required
+                        disabled={!isReporting ? true : false}
+                    />
+                    <label htmlFor="reporter-lastname">Last Name</label>
+                    <input
+                        name="lastName"
+                        value={issue.reporter.lastName}
+                        type="text"
+                        id="reporter-lastname"
+                        placeholder="Last-Name"
+                        onChange={handleChange}
+                        required
+                        disabled={!isReporting ? true : false}
+                    />
+                    <label htmlFor="reporter-email">Email</label>
+                    <input
+                        name="email"
+                        value={issue.reporter.email}
+                        type="email"
+                        id="reporter-email"
+                        placeholder="Email"
                         onChange={handleChange}
                         required
                     />
-                    <button type="submit" onClick={isReporting ? handleSubmit : editBug}>
+
+                    <button type="submit" onClick={isReporting ? createIssue : editBug}>
                         {isReporting ? "Report Issue" : "Update Issue"}
                     </button>
                 </form>
