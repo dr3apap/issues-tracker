@@ -1,20 +1,15 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../Controllers/Redux/rootReducer";
+import { useAppSelector, useAppDispatch } from "../../../../Controllers/Hooks/app-hooks";
 
 type AuthProviderProps = {
     children: JSX.Element;
 };
 
 export default function RequireAuth({ children }: AuthProviderProps) {
-    const { users } = useSelector((state: RootState) => state);
-    const { auth } = useSelector((state: RootState) => state);
+    const { users } = useAppSelector((users) => users);
+    const { auth } = useAppSelector((auth) => auth);
     const location = useLocation();
-
-
     users.forEach((user) => {
-
-
         //      if (auth.LoggedIn && user.role === "dev" || user.role === "admin") {
         //          return children;
         //      }

@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import store from '../src/Controllers/Redux/rootReducer'
 import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
@@ -6,9 +7,6 @@ import reducer from './Controllers/Redux/rootReducer';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
-const store = configureStore({
-    reducer
-})
 //const domNode = document.getElementById("root") as HTMLDivElement
 
 const root = createRoot(document.getElementById("root") as HTMLDivElement).render(
