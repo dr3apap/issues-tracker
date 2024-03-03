@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './login.css';
 import { useAppDispatch, useAppSelector } from '../../../Controllers/Hooks/app-hooks';
 import { signIn } from '../../../Controllers/Redux/authSlice';
-import { RootState } from '../../../Controllers/Redux/rootReducer';
 import { getUser } from '../../../Controllers/Redux/userSlice';
 import { createUser } from '../../../Controllers/Redux/userSlice';
-import User from '../../../Models/userFactory';
+import User from '../../../Models/reporterFactory';
+import RegisterUser from '../../../Models/registerUserFactory';
 import { nanoid } from '@reduxjs/toolkit';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { FormState, } from '../../../Controllers/Hooks/useForm';
@@ -16,122 +16,125 @@ type LoginAndRegisterProps = {
 };
 type PasswordMatch = string;
 let passwordConfirm: PasswordMatch = ""
-export default function Login({ formState, setForm }: LoginAndRegisterProps) {
-    const dispatch = useAppDispatch();
-    const { users } = useAppSelector((state) => state);
-    const navigate = useNavigate();
-    const { userId } = useParams();
+export default function Login() {
     const { pathname: currentPath } = useLocation()
+    let findAuthUser: User;
+    const { userId } = useParams();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     console.log(`Inside userForm:{CurrentPath:${currentPath}}`)
-    const {
-        login, signup, editing
-    } = formState
+
     // this check the user database for the current user
     // useEffect(() => {
     //     dispatch(getUser())
 
     // },[dispatch])
+    const [authUser, setAuthUser] = useState({
+        userName: "",
+        password: "",
+    } as RegisterUser)
 
     const [newUser, setNewUser] = useState({
-        _userId: "",
         firstName: "",
         lastName: "",
-        userName: "",
-        password: "",
+        email: "",
     } as User)
-    const [pass, setPass] = useState({
-        userName: "",
-        //email:"",
-        password: "",
-    })
-    // this populate the user form for editing with the user data
-    useEffect(() => {
-        if (editing) {
-            const user = users.find(user => user._userId == userId);
-            setNewUser(user as User);
-        };
-    }, [])
-    // this handle the form input change 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-        setPass({
-            ...pass,
-            [e.target.name]: e.target.value,
 
-        })
-    }
-    // this handle the login for user with authentication
-    function handleSubmit(e: React.MouseEvent<HTMLFormElement>) {
-        e.preventDefault();
-        setPass({
-            ...pass, userName: "",
-            // email:"",
-            password: "",
-        })
-        console.log("pass", pass)
-        handleLogin();
-    }
-    // this authenticate user and redirect to their page on success 
-    function handleLogin() {
-        if (
-            users.find(user => user.userName === pass.userName &&
-                user.password === pass.password)
-            //    user.userName === pass.userName && user.password === pass.passWord
-        ) {
-            dispatch(signIn());
-            navigate("/user/dashboard");
-        } else {
-            navigate("/user/login");
-        }
-    }
 
     // this handle the signup for new user and re-direct them to login.
     function handleSignUp(e: React.MouseEvent<HTMLFormElement>) {
         e.preventDefault();
-        dispatch(createUser(newUser));
+        dispatch(createUser({ ...newUser, registerUser: { ...authUser } }));
+        setAuthUser({ userName: "", password: "" });
         setNewUser({
-            _userId: nanoid(),
             firstName: "",
             lastName: "",
-            userName: "",
-            password: "",
+            email: "",
+            registerUser: { ...authUser }
         });
         navigate('/user/login')
     }
+
+
+
+    //this handle the Login form input change 
+    function handleLoginChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+        setAuthUser({
+            ...authUser,
+            [e.target.name]: e.target.value,
+        })
+    }
+
+
+    findAuthUser = useAppSelector((users) => users.users.find(user => user.registerUser?.userName === authUser.userName &&
+        user.registerUser?.password === authUser.password) as User)
+
+    //this populate the user form for editing with the user data
+    //if (currentPath == '/user/editing') {
+    // if (findAuthUser)
+    //  setNewUser({ ...newUser, ...findAuthUser as User });
+    // }
+
+
+    // this authenticate user and redirect to their page on success 
+    function handleLogin() {
+        if (findAuthUser) {
+            dispatch(signIn());
+            navigate(`/user/dashboard/${findAuthUser.registerUser?.userName}`);
+        } else {
+            navigate("/");
+        }
+
+    }
+
+    // this handle the login for user with authentication
+    function handleUserLogin(e: React.MouseEvent<HTMLFormElement>) {
+        e.preventDefault();
+        setAuthUser({
+            ...authUser, userName: "",
+            // email:"",
+            password: "",
+        })
+        handleLogin();
+    }
+
+
+
 
     // this function handle the React controlled input for the signup form.
     function handleSignUpChange(
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) {
-        passwordConfirm = e.target.name == "passwordmatch" && e.target.value || "";
-        if (e.target.name == "passwordmatch" && passwordConfirm != newUser.password) return;
+        passwordConfirm = e.target.name == "passwordmatch" ? e.target.value : "";
         setNewUser(
             {
                 ...newUser,
-                [e.target.name]: e.target.value
+                [e.target.name]: e.target.value,
             });
-        console.log(newUser)
+        setAuthUser({ ...authUser, [e.target.name]: e.target.value });
+        console.log(`Inside Login:{NewUse:${{ ...newUser }}}:{AuthUser:${{ authUser }}}`)
     }
 
     return (
         <div className="dataBg">
             {currentPath == '/user/login' && (
-                <form className="dataWrapper" onSubmit={handleSubmit}>
+                <form className="dataWrapper" onSubmit={handleUserLogin}>
                     <h1>Login:</h1>
                     <input
-                        onChange={handleChange}
+                        onChange={handleLoginChange}
                         type="text"
                         name="userName"
-                        value={pass.userName}
+                        value={authUser.userName}
                         placeholder="User-Name"
                         className="data"
                     />
                     {/* <p  placeholder="Email" value={pass.email}className="data"/> */}
                     <input
-                        onChange={handleChange}
+                        onChange={handleLoginChange}
                         type="password"
                         name="password"
                         placeholder="Password"
-                        value={pass.password}
+                        value={authUser.password}
                         className="data"
                     />
                     <button type="submit" className="cta">Login</button>                     {/* { && <p style={{color:"white"}}>Incorrect user name or password please try again</p> } */}
@@ -157,22 +160,31 @@ export default function Login({ formState, setForm }: LoginAndRegisterProps) {
                         value={newUser.lastName}
                         className="data"
                     />
+                    <input
+                        onChange={handleSignUpChange}
+                        type="text"
+                        name="email"
+                        placeholder="email"
+                        value={newUser.email}
+                        className="data"
+                    />
+
 
                     <input
                         onChange={handleSignUpChange}
                         type="text"
                         name="userName"
                         placeholder="user-Name"
-                        value={newUser.userName}
+                        value={newUser.registerUser?.userName}
                         className="data"
                     />
-                    {/* <input onChange={handleChange}type="email" name="email" placeholder="Email" value={pass.email}className="data"/> */}
+                    {/* <input onChange={handleLoginChange}type="email" name="email" placeholder="Email" value={pass.email}className="data"/> */}
                     <input
                         onChange={handleSignUpChange}
                         type="password"
                         name="password"
                         placeholder="Password"
-                        value={newUser.password}
+                        value={newUser.registerUser?.password}
                         className="data"
                     />
                     <input onChange={handleSignUpChange}
@@ -182,7 +194,7 @@ export default function Login({ formState, setForm }: LoginAndRegisterProps) {
                         className="data"
                     />
                     <button type="submit" className="px-8 py-4 bg-[var(--surface)] rounded-full text-[var(--text-color)]">Create Account</button>
-                    {!(passwordConfirm == newUser.password) && <p className="text-yellow-400">Password did not match</p>}
+                    {!(passwordConfirm == newUser.registerUser?.password) && <p className="text-yellow-400">Password did not match</p>}
 
 
                 </form>

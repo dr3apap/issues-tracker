@@ -21,15 +21,19 @@ const authSlice = createSlice({
         LoggedIn: false,
     },
     reducers: {
-        signIn: (state: AuthState /*action:PayloadAction<AuthAction>*/) => {
+        signIn: (auth: AuthState /*action:PayloadAction<AuthAction>*/) => {
             //const {userName, passWord, role} = action.payload;
-            state.LoggedIn = true;
-            state.LoggedOut = false;
+            return {
+                ...auth, ['LoggedIn']: true,
+                ['LoggedOut']: false,
+            }
         },
 
-        signOut: (state: AuthState) => {
-            state.LoggedIn = false;
-            state.LoggedOut = true;
+        signOut: (auth: AuthState) => {
+            return {
+                ...auth, ['LoggedIn']: false,
+                ['LoggedOut']: true,
+            }
         },
 
     }

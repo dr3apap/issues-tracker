@@ -1,4 +1,4 @@
-import User from '../../../Models/userFactory'
+import User from '../../../Models/reporterFactory'
 import { Link } from 'react-router-dom';
 import { FormState } from '../../../Controllers/Hooks/useForm';
 
@@ -9,7 +9,9 @@ type BugTrackerUserProps = {
 }
 export default function bugTrackerUser({ user, setForm }: BugTrackerUserProps) {
 
-    const { userName, firstName, lastName, _userId } = user;
+    const { registerUser, firstName, lastName } = user;
+    const userName = registerUser?.userName;
+    const _userId = registerUser?._userId;
 
     return (
         <Link

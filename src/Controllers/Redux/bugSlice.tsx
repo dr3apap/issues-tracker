@@ -12,11 +12,14 @@ interface BugAction {
     state: "Open" | "Closed" | "In Progress";
 }
 
-interface BugUpdate {
-    id: string;
-    description: string,
-    issueType: string,
+type IssueById = string;
 
+interface BugUpdate {
+    id: string,
+    description: string,
+    issueType: string;
+    appVersion: string;
+    appName: string;
 }
 
 // type BugUpdate = {
@@ -45,12 +48,12 @@ const bugSlice = createSlice({
         },
 
         updateBug: (state: MakeBugs[], action: PayloadAction<BugUpdate>) => {
-            [...state].forEach((b, i) => {
-                if (b._id === action.payload.id) {
-                    state[i].description = action.payload.description;
+            return state.map((state) => {
+                const issueToUpdate = [state].find((b, i) => b._id === action.payload.id)
+                if (issueToUpdate) return {
+                    ...issueToUpdate, ...action.payload
                 }
-            });
-            return state;
+            }) as MakeBugs[]
         },
 
         getClosedIssues: (state: MakeBugs[], action: PayloadAction<BugAction>) =>
@@ -59,13 +62,14 @@ const bugSlice = createSlice({
             ensureT([...state].find(bug => bug.issueState === action.payload.state)),
         getInprogressIssues: (state: MakeBugs[], action: PayloadAction<BugAction>) =>
             ensureT([...state].find(bug => bug.issueState === action.payload.state)),
-    }
+        getIssueById: (issues: MakeBugs[], action: PayloadAction<IssueById>) => ensureT([...issues].find(issue => issue._id == action.payload)),
+    },
 
 });
 
 
 export default bugSlice.reducer
-export const { reportBug, getClosedIssues, getBugs, updateBug, getOpenIssues, getInprogressIssues } = bugSlice.actions;
+export const { reportBug, getClosedIssues, getBugs, updateBug, getOpenIssues, getInprogressIssues, getIssueById } = bugSlice.actions;
 export const IssuesDispatch = { ...bugSlice.actions }
 console.log(`Inside bugslice:${Object.keys(IssuesDispatch)}`)
 //export type IssuesDispatch = keyof bugSlice.actions;

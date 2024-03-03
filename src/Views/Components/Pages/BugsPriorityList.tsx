@@ -34,7 +34,7 @@ export default function BugsPriorityList(/*props:BugsPriorityViewProps*/) {
                             <p className="info">{bug.description}</p>
                             <h4>{level}</h4>
                             <h4>{bug.issueState}</h4>
-                            <h4>{bug.reporter}</h4>
+                            <h4>{bug.reporter.firstName} {bug.reporter.lastName}</h4>
                         </div>
                     </Link>
                 ))}

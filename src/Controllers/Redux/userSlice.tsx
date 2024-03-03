@@ -1,16 +1,17 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import User from '../../Models/userFactory'
+import IssueReporter from '../../Models/reporterFactory'
+import RegiserUser from '../../Models/registerUserFactory'
 
 const userSlice = createSlice({
     name: "user",
-    initialState: [] as User[],
+    initialState: [] as IssueReporter[],
     reducers: {
 
-        createUser: (state: User[], action: PayloadAction<User>) => {
-            state.push(action.payload);
+        createUser: (state: IssueReporter[], action: PayloadAction<IssueReporter>) => {
+            state.push({ ...action.payload });
         },
-        getUser: (state: User[] /*action:PayloadAction<Users>*/) => {
+        getUser: (state: IssueReporter[] /*action:PayloadAction<Users>*/) => {
             return state;
 
         }

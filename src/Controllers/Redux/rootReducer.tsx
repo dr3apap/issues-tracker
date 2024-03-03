@@ -5,12 +5,14 @@ import auth from "./authSlice";
 import issues from "./bugSlice";
 import users from "./userSlice";
 import apps from "./appSlice";
+import registerUsers from "./registerUserSlice"
 
 const reducer = {
     auth,
     issues,
     users,
     apps,
+    registerUsers,
 }
 
 const store = configureStore({ reducer })

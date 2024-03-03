@@ -1,5 +1,6 @@
 import { nanoid } from "@reduxjs/toolkit";
 import MakeBugs from "../Models/bugsFactory";
+import IssueReporter from '../Models/reporterFactory';
 
 // import { BugPayload } from "./Redux/bugSlice"
 
@@ -10,12 +11,14 @@ const bug1: MakeBugs = {
     _id: nanoid(),
     issueType: "Freeze",
     description: "App suddenly froze and need to be restart",
-    reporter: "Dre Michael",
+    reporter: { firstName: "Dre", lastName: "Adesina", email: "dr3@yahoo.com" },
     timeReported: new Date().toString().slice(0, 24),
     priority: "High",
     issueState: "Open",
     issueTitle: "",
     appName: "",
+    appVersion: "",
+    repolink: "",
 
 
 }
@@ -24,12 +27,15 @@ const bug2: MakeBugs = {
     _id: nanoid(),
     issueType: "Crash",
     description: "App crash on startup",
-    reporter: "Desmond Dessy",
+    reporter: { firstName: "Desmond", lastName: "Dessy", email: "dessy@yahoo.com" },
     timeReported: new Date().toString().slice(0, 24),
     priority: "High",
     issueState: "Open",
     issueTitle: "",
     appName: "",
+    appVersion: "",
+    repolink: "",
+
 }
 
 
@@ -37,12 +43,15 @@ const bug3: MakeBugs = {
     _id: nanoid(),
     issueType: "Loading",
     description: "App stuck on loading",
-    reporter: "Desiree Brat",
+    reporter: { firstName: "Desieee", lastName: "Brat", email: "brat@yahoo.com" },
     timeReported: new Date().toString().slice(0, 24),
     priority: "Medium",
     issueState: "In Progress",
     issueTitle: "",
     appName: "",
+    appVersion: "",
+    repolink: "",
+
 }
 
 
@@ -50,12 +59,15 @@ const bug4: MakeBugs = {
     _id: nanoid(),
     issueType: "Crash",
     description: "App suddenly crash",
-    reporter: "Sage Looney",
+    reporter: { firstName: "Sage", lastName: "Looney", email: "sage@yahoo.com" },
     timeReported: new Date().toString().slice(0, 24),
     priority: "Low",
     issueState: "Closed",
     issueTitle: "",
     appName: "",
+    appVersion: "",
+    repolink: "",
+
 }
 
 

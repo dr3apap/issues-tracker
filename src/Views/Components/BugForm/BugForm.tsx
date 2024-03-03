@@ -162,6 +162,8 @@ export default function Form(props: FormProps) {
                         onChange={handleChange}
                         required
                     />
+
+                    <label htmlFor="repolink">Repolink:</label>
                     <input
                         name="repolink"
                         value={app.repolink}

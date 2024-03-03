@@ -8,12 +8,12 @@ export interface IssueToApp {
 
 const issueCard = ({ app, level }: IssueToApp
 ) => {
-    const { appName, version, repolink } = app;
+    const { appName, appVersion, repolink } = app;
     return (
         <>
             <h2>{appName}</h2>
             <h4>{level}</h4>
-            <h5>{version}</h5>
+            <h5>{appVersion}</h5>
             <h5>{repolink ? `${repolink}` : ''}</h5>
         </>
     );
