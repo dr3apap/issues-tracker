@@ -46,64 +46,89 @@ export default function Form(props: FormProps) {
    */
     //useEffect(() => {
     //    if (!isReporting) {
-    //        setIssue(issues.find((issue) => issue._id == issueId) as MakeBugs);
-    //        setApp(apps.find((app) => app._id == issueId) as Application);
+    //        setIssue(issues.find((issue) => issue._id == userName) as MakeBugs);
+    //        setApp(apps.find((app) => app._id == userName) as Application);
     //    }
     //}, []);
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
 
-
+    //Routine for conrtrolled form input
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         setIssue({
             ...issue,
             [e.target.name]: e.target.value,
-            issueType: e.target.getAttribute('data-type') as string
-
+            reporter: {
+                ...issue.reporter,
+                [e.target.name]: e.target.value,
+            }
         });
+
         setApp({
             ...app, [e.target.name]: e.target.value,
         });
 
+        if (isReporting) {
+            dispatch(createUser(issue.reporter))
+        }
+
     }
-    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-
+    const createIssue = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        setIssue({
-            description: "",
-            issueType: "",
-            reporter: "",
-            priority: "High",
-            timeReported: new Date().toString().slice(0, 24),
-            _id: nanoid(),
-            issueState: "Open",
-            issueTitle: "",
-            appName: "",
-        });
-
         dispatch(reportBug(issue));
         dispatch(createApp(app));
-        navigate('/user/dashboard');
-    }
-    const editBug = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
         setIssue({
             description: "",
             issueType: "",
-            reporter: "",
+            reporter: {} as IssueReporter,
             priority: "High",
             timeReported: new Date().toString().slice(0, 24),
             _id: nanoid(),
             issueState: "Open",
             issueTitle: "",
             appName: "",
+            appVersion: "",
+            repolink: "",
         });
-
-        //dispatch(updateBug(bugs, bug));
-
-        navigate(`/issueupdate/${issueId}`);
-
+        if (userName) {
+            navigate(`/user/dashboard/${userName}/issues/viewissues/${issue.issueState.toLowerCase().trim()}`)
+        } else {
+            navigate(`/issues/viewissues/${issue.issueState.toLowerCase().trim()}`);
+        }
     }
+
+
+    const issueToEdit = useAppSelector((issues) => issues.issues.find((issue) => issue._id == issueId)) as MakeBugs
+
+    const issueToEditAppName = issueToEdit?.appName;
+
+    const appToupdate = useAppSelector((apps) => apps.apps.find((app) => app.appName == userName || app.appName == issueToEditAppName)) as Application
+
+
+
+
+    useEffect(() => {
+        if (issueToEdit) {
+            setIssue({ ...issue, ...issueToEdit });
+            setApp({ ...app, ...appToupdate });
+        }
+    }, [isReporting])
+
+    const editBug = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const payload = {
+            id: issue._id,
+            description: issue.description,
+            appName: issue.appName,
+            appVersion: issue.appVersion,
+            issueType: issue.issueType
+        }
+        dispatch(updateBug(payload));
+        if (userName) {
+            navigate(`/user/dashboard/${userName}/issue/details/${issue._id}`);
+        } else {
+            navigate(`/issue/details/${issue._id}`);
+        }
+    }
+
     return (
         <div className="pageWrapper">
             <div className="bugReport">

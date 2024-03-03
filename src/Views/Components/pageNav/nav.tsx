@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link, Outlet } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const pageNav = () => {
     return (<nav className="flex justify-between bg-white-500 backdrop-blur sticky top-0 left-0 z-10 p-2 b">
-        <Link to="/" className="w-11 h-11 text-fluid-1"><span className="text-[var(--color-secondary-100)]">Bug</span><span className="text-[var(--color-brand-500)]">•</span><span className="text-[var(--color-brand-500)]">Tracker</span></Link>
+        <NavLink to="/" className="w-11 h-11 text-fluid-1"><span className="text-[var(--color-secondary-100)]">Bug</span><span className="text-[var(--color-brand-500)]">•</span><span className="text-[var(--color-brand-500)]">Tracker</span></NavLink>
         <form className="place-items-center" id="theme-toggle" action="theme-toggle">
             <button aria-controls="theme-toggle" className="theme-toggle w-11 h-11 relative hover:bg-surface-3 rounded-md">
                 <span aria-describedby="theme-toggle__icon" className="theme-toggle__icon absolute inset-0 w-full h-full grid place-items-center">

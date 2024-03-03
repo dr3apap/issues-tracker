@@ -10,69 +10,75 @@ import BugList from './Views/Components/bugsCard/BugList';
 import BugForm from './Views/Components/BugForm/BugForm';
 import DashBoardList from './Views/Components/Pages/DashBoardList';
 import IssueSummary from './Views/Components/Pages/IssueSummary';
-import BugsPriorityList from './Views/Components/Pages/BugsPriorityList';
+import IssueDashInfo from './Views/Components/Pages/DashBoardInfo';
 import BugDetail from './Views/Components/BugView/BugDetail';
 import RequierAuth from './Views/Components/Pages/Components/RequierAuth';
 import RequireAuth from './Views/Components/Pages/Components/RequierAuth';
 import Footer from './Views/Components/Footer/footer'
+import LoginChoice from './Views/Components/Login/choice';
 import useForm from "./Controllers/Hooks/useForm";
-import BugTrackerUserList from './Views/Components/Login/BugTrackerUserList';
 
 function App() {
 
-    const { auth } = useSelector((state: RootState) => state);
-
+    const { auth } = useAppSelector((state: RootState) => state);
     const [formState, setForm] = useForm();
-
     return (
         <>
             {/* <SideBar LoggedIn={auth.LoggedIn} /> */}
             <PageNav />
             <Routes>
                 <Route path="/" element={<Hero />} />
-                <Route path="user/login" element={<UserForm formState={formState} setForm={setForm} />} />
-                <Route path="user/newuser" element={<UserForm formState={formState} setForm={setForm} />} />
+                <Route path="user/choice" element={<LoginChoice />} />
+                <Route path="user/login" element={<UserForm />} />
+                <Route path="user/newuser" element={<UserForm />} />
+                <Route path="issue/reportissue" element={<BugForm isReporting />} />
+                <Route path="issues/viewissues/:issueskind" element={<IssueSummary />} />
+                <Route path="issue/details/:issueId" element={<BugDetail />} />
+                <Route path="issue/edit/:issueId" element={<BugForm isReporting={false} />} />
+                <Route path="user/dashboard/:userName" element={<RequireAuth>
+                    <SideBar />
+                </RequireAuth>}>
+                    <Route path="issues" element={<RequireAuth><IssueDashInfo /></RequireAuth>} />
+                    <Route
+                        path="issue/reportissue"
+                        element={
+                            <RequireAuth>
+                                <BugForm isReporting />
+                            </RequireAuth>
+                        }
+                    />
 
-                <Route path="user/dashboard" element={<SideBar loggedIn={auth.LoggedIn} />}>
-                </Route>
-                <Route path="user/dashboard/:issuesKind" element={<IssueSummary />} />
-                <Route path="user/dashboard/issues/:priorityId" element={<BugDetail
-                />} />
+                    <Route path="issues/viewissues/:issueskind" element={<RequireAuth><IssueSummary /></RequireAuth>} />
+                    <Route path="issue/details/:issueId" element={<RequireAuth><BugDetail
+                    /></RequireAuth>} />
+                    <Route
+                        path="issue/edit/:issueId"
+                        element={<RequierAuth><BugForm isReporting={false} /></RequierAuth>}
+                    />
 
-                {/*<Route path="issueupdate/:issueId" element={<BugsPriorityList />} />
+                    {/*<Route path="issueupdate/:issueId" element={<BugsPriorityList />} />
                 <Route path="users" element={
                     <RequireAuth>
                         <BugTrackerUserList setForm={setForm} />
                     </RequireAuth>} />*/}
-                <Route path="updateuser/:userId" element={
-                    <UserForm formState={formState} setForm={setForm} />} />
-                <Route
-                    path="viewbugs"
-                    element={
-                        <RequierAuth>
-                            <BugList />
-                        </RequierAuth>
-                    }
-                />
-                <Route path="viewbug/:id" element={<BugDetail />} />
-                <Route
-                    path="issueupdate/:issueId"
-                    element={<BugForm isReporting={false} />}
-                />
+                    <Route path="issue/edit/:userId" element={
+                        <RequierAuth><UserForm /></RequierAuth>} />
+                    <Route
+                        path="viewbugs"
+                        element={
+                            <RequierAuth>
+                                <BugList />
+                            </RequierAuth>
+                        }
+                    />
 
+                </Route>
 
-                <Route
-                    path="reportbug"
-                    element={
-                        <RequireAuth>
-                            <BugForm isReporting />
-                        </RequireAuth>
-                    }
-                />
             </Routes>
             <Footer />
         </>
     );
+
 }
 
 export default App;

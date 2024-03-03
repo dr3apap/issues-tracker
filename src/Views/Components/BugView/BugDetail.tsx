@@ -28,14 +28,16 @@ const IssueCard = () => {
         <div className="flex flex-col gap-4 bg-[var(--color-rich-secondary-100)] shadow-md">
             <h2 className="text-fluid--2">Title:{issueTitle}</h2>
             <li className="text-fluid--2">Application Name:{appName}</li>
-            <li className="text-fluid--2">Verion:{version}</li>
+            <li className="text-fluid--2">Verion:{appVersion}</li>
             <li className={`rounded-full px-4 py-4 outline-none ${priority == "High" ? "bg-priority-1" : priority == "Medium" ? "bg-priority-2" : "bg-priority-3"}`}>Status:{issueState}</li>
             <li className="text-fluid--2">Date Reported:{timeReported}</li>
-            <li className="text-fluid--2">Reporter Name:{reporter}</li>
+            <li className="text-fluid--2">Reporter First Name:{reporter.firstName}</li>
+            <li className="text-fluid--2">Reporter Last Name:{reporter.lastName}</li>
+            <li className="text-fluid--2">Reporter Email:{reporter.email}</li>
             <li className="text-fluid--2">Priority:{priority}</li>
             <li className="text-fluid--2">Issue Type:{issueType}</li>
             <li className="text-fluid--2"><div>Description:{description}</div></li>
-            <Link to={`/issueupdate/${priorityId}`} className="px-4 py-4 rounded-full text-fluid--2 bg-priority-3 tex-[var(--color-brand-100)] border-2 border-[var(--color-brand-300)]">Edit Report</Link>
+            <Link to={userName ? `/user/dashboard/${userName}/issue/edit/${issueId}` : `/issue/edit/${issueId}`} className="px-4 py-4 rounded-full text-fluid--2 bg-priority-3 tex-[var(--color-brand-100)] border-2 border-[var(--color-brand-300)]">Edit Report</Link>
         </div>
     );
 
